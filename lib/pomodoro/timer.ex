@@ -5,41 +5,30 @@ defmodule Pomodoro.Timer do
 
   @name :pomodoro_timer
 
-  def start_link(timeout \\ 1_500_000) do
-    GenServer.start_link __MODULE__, timeout, name: {:global, @name}
+  def start_link() do
+    GenServer.start_link __MODULE__, nil, name: {:global, @name}
   end
 
-  def set_task(pid) do
+  def set_task(pid, timeout) do
     @name
     |> :global.whereis_name
-    |> GenServer.cast({:start, pid})
-  end
-
-  def status do
-    @name
-    |> :global.whereis_name
-    |> GenServer.cast(:status)
+    |> GenServer.cast({:start, pid, timeout})
   end
 
   # GenServer implementation
 
-  def init(timeout) do
-    {:ok, %{timeout: timeout}}
+  def init(nil) do
+    {:ok, nil}
   end
 
-  def handle_cast({:start, pid}, %{timeout: timeout}) do
+  def handle_cast({:start, pid, timeout}, _state) do
     timer = Process.send_after(self, :times_up, timeout)
-    {:noreply, %{timer: timer, timeout: timeout, pid: pid}}
+    {:noreply, %{timer: timer, pid: pid}}
   end
 
-  def handle_cast(:status, %{timer: timer, pid: pid}) when do
-    timer = Process.send_after(self, :times_up, timeout)
-    {:noreply, %{timer: timer, timeout: timeout, pid: pid}}
-  end
-
-  def handle_info(:times_up, %{timer: timer, pid: pid, timeout: timeout}) do
+  def handle_info(:times_up, %{timer: timer, pid: pid}) do
     Process.cancel_timer(timer)
     send(pid, :times_up)
-    {:noreply, %{timeout: timeout}}
+    {:noreply, nil}
   end
 end
