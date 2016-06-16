@@ -3,7 +3,7 @@ defmodule Pomodoro.BaseTask do
 
   # Public API
 
-  def start_link(notifierClass, description, timeout) do
+  def start(notifierClass, description, timeout) do
     GenServer.start_link __MODULE__, [notifierClass, description, timeout]
   end
 
