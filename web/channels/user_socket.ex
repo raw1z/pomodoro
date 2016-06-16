@@ -2,7 +2,7 @@ defmodule Pomodoro.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "rooms:*", Pomodoro.RoomChannel
+  channel "tasks:*", Pomodoro.TaskChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

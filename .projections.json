@@ -1,0 +1,50 @@
+{
+  "config/*": {
+    "command": "config"
+  },
+
+  "web/templates/*": {
+    "command": "template"
+  },
+
+  "web/models/*.ex": {
+    "command": "model",
+    "alternate": "test/models/{}_test.exs"
+  },
+
+  "web/channels/*.ex": {
+    "command": "channel",
+    "alternate": "test/channels/{}_test.exs"
+  },
+
+  "web/views/*.ex": {
+    "command": "view"
+  },
+
+  "web/controllers/*.ex": {
+    "command": "controller",
+    "alternate": "test/controllers/{}_test.exs"
+  },
+
+  "lib/pomodoro/*.ex": {
+    "alternate": "test/{}_test.exs",
+    "command": "lib"
+  },
+
+  "test/*_test.exs": {
+    "alternate": "lib/pomodoro/{}.ex",
+    "command": "test"
+  },
+
+  "web/*.ex": {
+    "command": "web"
+  },
+
+  "web/static/js/*.js": {
+    "command": "javascript"
+  },
+
+  "web/static/css/*.sass": {
+    "command": "stylesheet"
+  }
+}
