@@ -1,0 +1,43 @@
+@import url("http://raw1z-cdn.s3.amazonaws.com/fonts/sofia-pro/font.css");
+
+html, body {
+  font-family: sofia-pro, sans-serif;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#app {
+  min-width: 600px;
+}
+
+.btn-add {
+  display: block;
+  border-top: thin solid #ddd;
+  border-left: thin solid #ddd;
+  border-right: thin solid #ddd;
+  padding: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.tasks {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+
+  .task {
+    white-space: nowrap;
+    padding: 0.5rem;
+    border-top: thin solid #ddd;
+    border-left: thin solid #ddd;
+    border-right: thin solid #ddd;
+    &:last-child {
+      border-bottom: thin solid #ddd;
+    }
+  }
+}
+

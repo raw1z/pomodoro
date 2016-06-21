@@ -4,13 +4,13 @@ import TaskView from './task-view';
 
 const TasksView = ({tasks}) => {
   return (
-    <div class="tasks">
+    <ul className="tasks">
       {
         tasks.map((task) => {
-          return <TaskView task={task} />
+          return <TaskView key={task.id} task={task} />
         })
       }
-    </div>
+    </ul>
   );
 };
 

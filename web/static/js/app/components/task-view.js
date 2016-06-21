@@ -2,8 +2,9 @@ import React from 'react';
 
 const TaskView = ({task}) => {
   return (
-    <div class="task">
-    </div>
+    <li className="task">
+      {task.description}
+    </li>
   );
 };
 
