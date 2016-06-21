@@ -21,6 +21,12 @@ defmodule Pomodoro.Timer do
     |> GenServer.call(:status)
   end
 
+  def stop() do
+    @name
+    |> :global.whereis_name
+    |> GenServer.cast(:stop)
+  end
+
   # GenServer implementation
 
   def init(nil) do
@@ -47,5 +53,15 @@ defmodule Pomodoro.Timer do
     minutesInRemainingTime = Float.floor(remainingTime/60) |> round
     secondsInRemainingTime = (remainingTime - (minutesInRemainingTime * 60)) |> round
     {:reply, {:running, {minutesInRemainingTime, secondsInRemainingTime}, pid}, state}
+  end
+
+  def handle_cast(:stop, _from, %{timer: timer, pid: pid}) do
+    Process.cancel_timer(timer)
+    send(pid, :cancel)
+    {:noreply, nil}
+  end
+
+  def handle_cast(:stop, nil) do
+    {:noreply, nil}
   end
 end

@@ -18,4 +18,8 @@ defmodule Pomodoro.BaseTask do
     notifierClass.notify(description)
     {:stop, :normal, nil}
   end
+
+  def handle_info(:cancel, _state) do
+    {:stop, :normal, nil}
+  end
 end
