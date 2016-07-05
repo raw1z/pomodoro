@@ -1,5 +1,7 @@
 defmodule Pomodoro.Pause do
-  def start(notifierClass) do
-    Pomodoro.BaseTask.start(notifierClass, "Pause", 30_0000)
+  alias Pomodoro.CompoundNotifier
+
+  def start(description \\ "Pause") do
+    Pomodoro.BaseTask.start(CompoundNotifier, description, 30_0000)
   end
 end

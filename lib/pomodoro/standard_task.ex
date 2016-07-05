@@ -1,5 +1,7 @@
 defmodule Pomodoro.StandardTask do
-  def start(notifierClass, description) do
-    Pomodoro.BaseTask.start(notifierClass, description, 150_0000)
+  alias Pomodoro.CompoundNotifier
+
+  def start(description) do
+    Pomodoro.BaseTask.start(CompoundNotifier, description, 150_0000)
   end
 end
