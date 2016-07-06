@@ -13,9 +13,16 @@ defmodule Pomodoro.CompoundNotifier do
     Agent.update(__MODULE__, &Enum.filter(&1, fn(notifier) -> notifierClass != notifier end))
   end
 
+  def get_notifiers do
+    Agent.get(__MODULE__, fn notifiers ->
+      notifiers
+    end)
+  end
+
   def notify(description) do
     Agent.get(__MODULE__, fn notifiers ->
       Enum.each(notifiers, &(&1.notify(description)))
     end)
   end
 end
+
