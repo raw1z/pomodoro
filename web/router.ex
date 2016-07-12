@@ -19,8 +19,8 @@ defmodule Pomodoro.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Pomodoro do
-  #   pipe_through :api
-  # end
+  scope "/api", Pomodoro do
+    pipe_through :api
+    resources "/tasks", TaskController, except: [:new, :edit]
+  end
 end

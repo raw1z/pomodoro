@@ -1,7 +1,7 @@
 defmodule Pomodoro.TaskChannel do
   use Pomodoro.Web, :channel
 
-  def join("tasks:timer", payload, socket) do
+  def join("tasks:crud", _payload, socket) do
     {:ok, socket}
   end
 

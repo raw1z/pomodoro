@@ -6,7 +6,7 @@ defmodule Pomodoro.TaskChannelTest do
   setup do
     {:ok, _, socket} =
       socket("user_id", %{some: :assign})
-      |> subscribe_and_join(TaskChannel, "tasks:lobby")
+      |> subscribe_and_join(TaskChannel, "tasks:crud")
 
     {:ok, socket: socket}
   end
@@ -16,7 +16,7 @@ defmodule Pomodoro.TaskChannelTest do
     assert_reply ref, :ok, %{"hello" => "there"}
   end
 
-  test "shout broadcasts to tasks:lobby", %{socket: socket} do
+  test "shout broadcasts to tasks:crud", %{socket: socket} do
     push socket, "shout", %{"hello" => "all"}
     assert_broadcast "shout", %{"hello" => "all"}
   end
