@@ -2,7 +2,7 @@ defmodule Pomodoro.TaskControllerTest do
   use Pomodoro.ConnCase
 
   alias Pomodoro.Task
-  @valid_attrs %{descripton: "some content", done: true}
+  @valid_attrs %{description: "some content", done: true}
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -18,7 +18,7 @@ defmodule Pomodoro.TaskControllerTest do
     task = Repo.insert! %Task{}
     conn = get conn, task_path(conn, :show, task)
     assert json_response(conn, 200)["data"] == %{"id" => task.id,
-      "descripton" => task.descripton,
+      "description" => task.description,
       "done" => task.done}
   end
 

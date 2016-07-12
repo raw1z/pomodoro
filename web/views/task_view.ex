@@ -11,7 +11,7 @@ defmodule Pomodoro.TaskView do
 
   def render("task.json", %{task: task}) do
     %{id: task.id,
-      descripton: task.descripton,
+      description: task.description,
       done: task.done}
   end
 end

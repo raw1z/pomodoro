@@ -17,7 +17,8 @@
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "sass-brunch": "^2.6.3",
-    "uglify-js-brunch": "~1.7.0"
+    "uglify-js-brunch": "~1.7.0",
+    "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
     "redux-devtools": "^3.3.1"

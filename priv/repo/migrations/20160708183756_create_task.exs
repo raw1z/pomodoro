@@ -3,7 +3,7 @@ defmodule Pomodoro.Repo.Migrations.CreateTask do
 
   def change do
     create table(:tasks) do
-      add :descripton, :string
+      add :description, :string
       add :done, :boolean, default: false
 
       timestamps

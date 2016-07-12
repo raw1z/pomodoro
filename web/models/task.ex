@@ -2,13 +2,13 @@ defmodule Pomodoro.Task do
   use Pomodoro.Web, :model
 
   schema "tasks" do
-    field :descripton, :string
+    field :description, :string
     field :done, :boolean, default: false
 
     timestamps
   end
 
-  @required_fields ~w(descripton done)
+  @required_fields ~w(description done)
   @optional_fields ~w()
 
   @doc """

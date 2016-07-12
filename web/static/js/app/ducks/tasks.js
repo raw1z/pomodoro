@@ -1,16 +1,34 @@
+import { get, post } from '../api-client';
+
 // Actions
-const LOAD   = 'pomodoro/tasks/load';
-const CREATE = 'pomodoro/tasks/create';
-const UPDATE = 'pomodoro/tasks/update';
-const REMOVE = 'pomodoro/tasks/remove';
+const LOAD    = 'pomodoro/tasks/load';
+const CREATE  = 'pomodoro/tasks/create';
+const UPDATE  = 'pomodoro/tasks/update';
+const REMOVE  = 'pomodoro/tasks/remove';
 
 // Action creators
+export function fetchTasks() {
+  return dispatch => {
+    get('/tasks').then((tasks) => {
+      dispatch(loadTasks(tasks));
+    });
+  }
+}
+
 export function loadTasks(tasks) {
   return { type: LOAD, tasks };
 }
 
-export function createTask(attributes) {
-  return { type: CREATE, attributes };
+export function createTask(task) {
+  return { type: CREATE, task }
+}
+
+export function newTask(attributes) {
+  return dispatch => {
+    post('/tasks', {task: attributes}).then((task) => {
+      dispatch(createTask(task));
+    });
+  };
 }
 
 export function updateTask(id, attributes) {
@@ -28,7 +46,7 @@ export default function reducer(state={}, action={}) {
       return action.tasks;
 
     case CREATE:
-      return [...state, action.attributes]
+      return [...state, action.task];
 
     case UPDATE:
       return state.map((task) => {

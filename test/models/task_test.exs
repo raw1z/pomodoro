@@ -3,7 +3,7 @@ defmodule Pomodoro.TaskTest do
 
   alias Pomodoro.Task
 
-  @valid_attrs %{descripton: "some content", done: true}
+  @valid_attrs %{description: "some content", done: true}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

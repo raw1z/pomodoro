@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TasksView from './tasks-view';
-import { createTask } from '../ducks/tasks';
+import { newTask } from '../ducks/tasks';
 
 const MainView = ({
   tasks,
@@ -23,8 +23,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAddBtnClicked: () => dispatch(createTask({
-      id: (new Date()).getTime(),
+    onAddBtnClicked: () => dispatch(newTask({
       description: 'a task'
     }))
   };
