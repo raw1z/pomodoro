@@ -5,21 +5,27 @@ import createLogger from 'redux-logger'
 import ReactDOM from 'react-dom';
 import MainView from './app/components/main-view'
 import socket from './socket';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import tasks from './app/ducks/tasks';
 import { fetchTasks } from './app/ducks/tasks';
 import { get } from './app/api-client';
 
 const loggerMiddleware = createLogger();
-const createStoreWithMiddleware = applyMiddleware(
+const middelware = [
   thunkMiddleware,
   loggerMiddleware
-)(createStore);
+]
 
 let reducer = combineReducers({ tasks });
-let store = createStoreWithMiddleware(reducer, {
+
+let initialState = {
   tasks: []
-});
+}
+
+let store = createStore(reducer, initialState, compose(
+  applyMiddleware(...middelware),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+))
 
 ReactDOM.render(
   <Provider store={store}>
