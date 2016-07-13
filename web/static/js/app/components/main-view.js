@@ -9,8 +9,15 @@ const MainView = ({
 }) => {
   return (
     <div className="main-view">
-      <a className="btn-add" onClick={onAddBtnClicked}>Add</a>
-      <TasksView tasks={tasks}/>
+      <div className="pane pane-left">
+        <div className="toolbar">
+          <a className="btn-add" onClick={onAddBtnClicked}>Add</a>
+        </div>
+        <TasksView tasks={tasks}/>
+      </div>
+
+      <div className="pane pane-right">
+      </div>
     </div>
   );
 };

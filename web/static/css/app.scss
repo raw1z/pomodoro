@@ -1,7 +1,11 @@
-@import url("http://raw1z-cdn.s3.amazonaws.com/fonts/sofia-pro/font.css");
+$font-family-sans-serif: gotham, sans-serif;
+
+@import 'bootstrap';
+
+$tools-background-color: $gray-lighter;
+$tools-foreground-color: $text-color;
 
 html, body {
-  font-family: sofia-pro, sans-serif;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -11,17 +15,41 @@ html, body {
 }
 
 #app {
-  min-width: 600px;
+  width: 100%;
+  height: 100%;
+
+  .main-view {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-content: stretch;
+  }
+
+  .pane {
+    flex: 1;
+
+    &.pane-left {
+      background-color: $tools-background-color;
+    }
+  }
+}
+
+.toolbar {
+  text-align: center;
+  padding: 1rem;
+  background-color: darken($tools-background-color, 10);
 }
 
 .btn-add {
-  display: block;
-  border-top: thin solid #ddd;
-  border-left: thin solid #ddd;
-  border-right: thin solid #ddd;
-  padding: 0.5rem;
   text-align: center;
   cursor: pointer;
+  color: $tools-foreground-color;
+  text-transform: uppercase;
+  transition: color 0.5s;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .tasks {
@@ -30,13 +58,40 @@ html, body {
   list-style-type: none;
 
   .task {
-    white-space: nowrap;
     padding: 0.5rem;
-    border-top: thin solid #ddd;
-    border-left: thin solid #ddd;
-    border-right: thin solid #ddd;
-    &:last-child {
-      border-bottom: thin solid #ddd;
+    color: $tools-foreground-color;
+    display: flex;
+    align-content: stretch;
+
+    & > div {
+      padding: {
+        left: 0.5rem;
+        right: 0.5rem;
+        top: 0.5rem;
+      }
+    }
+
+    .description {
+      flex: 1;
+    }
+
+    .actions {
+      display: flex;
+      visibility: hidden;
+
+      a {
+        display: inline-block;
+        margin-left: 0.5rem;
+        text-transform: uppercase;
+        color: $tools-foreground-color;
+        font-size: $font-size-small;
+      }
+    }
+
+    &:hover {
+      .actions {
+        visibility: visible;
+      }
     }
   }
 }
