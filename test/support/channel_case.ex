@@ -33,7 +33,10 @@ defmodule Pomodoro.ChannelCase do
 
   setup tags do
     unless tags[:async] do
-      Ecto.Adapters.SQL.restart_test_transaction(Pomodoro.Repo, [])
+      :ok = Ecto.Adapters.SQL.Sandbox.checkout(Pomodoro.Repo)
+      unless tags[:async] do
+        Ecto.Adapters.SQL.Sandbox.mode(Pomodoro.Repo, {:shared, self()})
+      end
     end
 
     :ok

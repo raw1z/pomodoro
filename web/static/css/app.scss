@@ -77,10 +77,9 @@ html, body {
 
     .actions {
       display: flex;
-      visibility: hidden;
+      align-items: center;
 
       a {
-        display: inline-block;
         margin-left: 0.5rem;
         text-transform: uppercase;
         color: $tools-foreground-color;
@@ -88,9 +87,31 @@ html, body {
       }
     }
 
-    &:hover {
+    &.non-editing {
       .actions {
-        visibility: visible;
+        visibility: hidden;
+      }
+
+      &:hover {
+        .actions {
+          visibility: visible;
+        }
+      }
+    }
+
+    &.editing {
+      border-bottom: thin solid darken($tools-background-color, 5);
+
+      .description {
+        input {
+          width: 100%;
+          background-color: transparent;
+          border: none;
+
+          &:focus {
+            outline: none;
+          }
+        }
       }
     }
   }

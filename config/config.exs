@@ -8,7 +8,6 @@ use Mix.Config
 # Configures the endpoint
 config :pomodoro, Pomodoro.Endpoint,
   url: [host: "localhost"],
-  root: Path.dirname(__DIR__),
   secret_key_base: "Y96BrWl57OVCi3aUMNqxBMiGzJJ3+js4X6VLvoTCx4w6bRHcax9j3F0Qih/sA/uR",
   render_errors: [accepts: ~w(html json)],
   pubsub: [name: Pomodoro.PubSub,
@@ -27,3 +26,6 @@ import_config "#{Mix.env}.exs"
 config :phoenix, :generators,
   migration: true,
   binary_id: false
+
+config :pomodoro, ecto_repos: [Pomodoro.Repo]
+
