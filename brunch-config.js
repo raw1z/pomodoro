@@ -21,7 +21,8 @@ exports.config = {
     // Dependencies and current project directories to watch
     watched: [
       "web/static",
-      "test/static"
+      "test/static",
+      "web/elm/pomodoro.elm"
     ],
 
     // Where to compile files to
@@ -31,7 +32,7 @@ exports.config = {
   // Configure your plugins
   plugins: {
     babel: {
-      presets: ['es2015', 'react'],
+      presets: ['es2015'],
       // Do not use ES6 compiler in vendor code
       ignore: [/web\/static\/vendor/]
     },
@@ -43,8 +44,13 @@ exports.config = {
     postcss: {
       processors: [
         require('autoprefixer')(['last 8 versions']),
-				require('csswring')
+        require('csswring')
       ]
+    },
+    elmBrunch: {
+      elmFolder: 'web/elm',
+      mainModules: ['Pomodoro.elm'],
+      outputFolder: '../static/vendor'
     }
   },
 

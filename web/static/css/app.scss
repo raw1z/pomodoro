@@ -2,9 +2,6 @@ $font-family-sans-serif: gotham, sans-serif;
 
 @import 'bootstrap';
 
-$tools-background-color: $gray-lighter;
-$tools-foreground-color: $text-color;
-
 html, body {
   width: 100vw;
   height: 100vh;
@@ -12,108 +9,5 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-#app {
-  width: 100%;
-  height: 100%;
-
-  .main-view {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-content: stretch;
-  }
-
-  .pane {
-    flex: 1;
-
-    &.pane-left {
-      background-color: $tools-background-color;
-    }
-  }
-}
-
-.toolbar {
-  text-align: center;
-  padding: 1rem;
-  background-color: darken($tools-background-color, 10);
-}
-
-.btn-add {
-  text-align: center;
-  cursor: pointer;
-  color: $tools-foreground-color;
-  text-transform: uppercase;
-  transition: color 0.5s;
-
-  &:hover {
-    text-decoration: none;
-  }
-}
-
-.tasks {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-
-  .task {
-    padding: 0.5rem;
-    color: $tools-foreground-color;
-    display: flex;
-    align-content: stretch;
-
-    & > div {
-      padding: {
-        left: 0.5rem;
-        right: 0.5rem;
-        top: 0.5rem;
-      }
-    }
-
-    .description {
-      flex: 1;
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-
-      a {
-        margin-left: 0.5rem;
-        text-transform: uppercase;
-        color: $tools-foreground-color;
-        font-size: $font-size-small;
-      }
-    }
-
-    &.non-editing {
-      .actions {
-        visibility: hidden;
-      }
-
-      &:hover {
-        .actions {
-          visibility: visible;
-        }
-      }
-    }
-
-    &.editing {
-      border-bottom: thin solid darken($tools-background-color, 5);
-
-      .description {
-        input {
-          width: 100%;
-          background-color: transparent;
-          border: none;
-
-          &:focus {
-            outline: none;
-          }
-        }
-      }
-    }
-  }
 }
 
