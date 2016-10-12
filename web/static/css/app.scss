@@ -1,4 +1,6 @@
-$font-family-sans-serif: gotham, sans-serif;
+$font-family-sans-serif: source-code-pro, sans-serif;
+$brand-color: #2c3e50;
+$brand-danger: #e74c3c;
 
 @import 'bootstrap';
 
@@ -8,6 +10,24 @@ html, body {
   overflow: hidden;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
+  background: $brand-color;
+  color: $gray-lighter;
 }
 
+.timeout {
+  font-size: 5*$font-size-h2;
+  text-align: center;
+}
+
+.task {
+  font-size: $font-size-h2;
+  text-align: center;
+  text-transform: uppercase;
+  transition: color 0.5s;
+
+  &.active {
+    color: $brand-danger;
+    font-weight: 700;
+  }
+}

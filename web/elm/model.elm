@@ -7,9 +7,10 @@ type alias Task =
 
 type alias Model =
   { tasks: List Task
+  , currentTimeout: Int
   }
 
 init : (Model, Cmd msg)
 init =
-  (Model [], Cmd.none)
+  (Model [] 0, Cmd.none)
 

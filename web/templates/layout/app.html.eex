@@ -15,5 +15,6 @@
   <body>
     <%= render @view_module, @view_template, assigns %>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <script src="//use.edgefonts.net/source-code-pro.js"></script>
   </body>
 </html>
