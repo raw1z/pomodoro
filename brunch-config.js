@@ -22,7 +22,9 @@ exports.config = {
     watched: [
       "web/static",
       "test/static",
-      "web/elm/pomodoro.elm"
+      "web/elm/pomodoro.elm",
+      "web/elm/model.elm",
+      "web/elm/ports.elm"
     ],
 
     // Where to compile files to

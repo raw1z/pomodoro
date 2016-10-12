@@ -44,6 +44,10 @@
     "command": "javascript"
   },
 
+  "web/elm/*.elm": {
+    "command": "elm"
+  },
+
   "web/static/css/*.scss": {
     "command": "stylesheet"
   }
