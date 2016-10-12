@@ -20,8 +20,8 @@ main =
 -- UPDATE
 
 type Msg
-  = Start Task
-  | TimesUp Task
+  = Start TaskData
+  | TimesUp TaskData
   | Tick Time
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -46,18 +46,21 @@ updateTimeout currentTimeout =
     else
       timeout
 
-isSameTask : Task -> Task -> Bool
-isSameTask task1 task2 =
-  task1.description == task2.description
+isSameTask : TaskData -> Task -> Bool
+isSameTask taskData task =
+  taskData.description == task.data.description
 
-updateTask : Task -> Task -> Task
+updateTask : TaskData -> Task -> Task
 updateTask newData task =
   if (isSameTask newData task) then
-    newData
+    let
+      runs = if newData.timeout == 0 then (task.runs + 1) else task.runs
+    in
+      { task | data = newData, runs = runs }
   else
     task
 
-updateTasks : Task -> List Task -> List Task
+updateTasks : TaskData -> List Task -> List Task
 updateTasks newData tasks =
   let
       updateThis : Task -> Task
@@ -65,12 +68,12 @@ updateTasks newData tasks =
   in
       List.map updateThis tasks
 
-addTask : Task -> List Task -> List Task
-addTask newTask tasks =
-  if List.any (isSameTask newTask) tasks then
-     updateTasks newTask tasks
+addTask : TaskData -> List Task -> List Task
+addTask newData tasks =
+  if List.any (isSameTask newData) tasks then
+     updateTasks newData tasks
   else
-    newTask :: tasks
+    (Task newData 0) :: tasks
 
 -- SUBSCRIPTIONS
 
@@ -85,12 +88,15 @@ subscriptions model =
 
 viewTask: Task -> Html msg
 viewTask task =
-  if task.timeout > 0 then
-    div [ (class "task active") ] [ text task.description ]
-  else
-    div [ (class "task") ]
-      [ text task.description
-      ]
+  let
+      classNames = if task.data.timeout > 0 then "task active" else "task"
+      description = task.data.description
+      runs = (toString task.runs)
+  in
+    div [ (class classNames) ]
+    [ span [ class "description" ] [ text description ]
+    , span [ class "runs" ] [ text runs ]
+    ]
 
 viewTimeout: Model -> Html msg
 viewTimeout model =

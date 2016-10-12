@@ -1,4 +1,4 @@
-$font-family-sans-serif: source-code-pro, sans-serif;
+$font-family-sans-serif: "Inconsolata", sans-serif;
 $brand-color: #2c3e50;
 $brand-danger: #e74c3c;
 
@@ -16,8 +16,15 @@ html, body {
 }
 
 .timeout {
-  font-size: 5*$font-size-h2;
+  font-size: 3*$font-size-h2;
   text-align: center;
+  padding: 1rem;
+  color: darken($gray-lighter, 15);
+}
+
+.tasks {
+  border-top: 1px solid darken($brand-color, 5);
+  padding-top: 3rem;
 }
 
 .task {
@@ -26,8 +33,28 @@ html, body {
   text-transform: uppercase;
   transition: color 0.5s;
 
+  .runs {
+    display: inline-block;
+    font-weight: 300;
+    padding-left: 0.5rem;
+    color: darken($gray-lighter, 20);
+
+    &:before {
+      content: "(";
+      margin-left: 0.5rem;
+      color: $gray-light;
+    }
+
+    &:after {
+      content: ")";
+      color: $gray-light;
+    }
+  }
+
   &.active {
-    color: $brand-danger;
-    font-weight: 700;
+    .description {
+      font-weight: 700;
+      color: $brand-danger;
+    }
   }
 }

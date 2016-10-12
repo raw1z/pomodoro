@@ -1,8 +1,13 @@
 module Model exposing (..)
 
-type alias Task =
+type alias TaskData =
   { description: String
   , timeout: Int
+  }
+
+type alias Task =
+  { data: TaskData
+  , runs: Int
   }
 
 type alias Model =
