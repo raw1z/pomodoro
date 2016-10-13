@@ -25,6 +25,7 @@ type Msg
   | TimesUp TaskData
   | Tick Time
   | Run TaskData
+  | ResetCount TaskData
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -33,7 +34,7 @@ update msg model =
       (Model (addTask task model.tasks) task.timeout, Cmd.none)
 
     TimesUp task ->
-      (Model (updateTasks task model.tasks) task.timeout, Cmd.none)
+      (Model (updateTasks updateTaskFromBackend task model.tasks) task.timeout, Cmd.none)
 
     Tick newTime ->
       (Model model.tasks (updateTimeout model.currentTimeout), Cmd.none)
@@ -43,6 +44,9 @@ update msg model =
         (model, Ports.run taskData)
       else
         (model, Cmd.none)
+
+    ResetCount task ->
+      (Model (updateTasks resetTaskRuns task model.tasks) model.currentTimeout, Cmd.none)
 
 updateTimeout : Int -> Int
 updateTimeout currentTimeout =
@@ -58,8 +62,15 @@ isSameTask : TaskData -> Task -> Bool
 isSameTask taskData task =
   taskData.description == task.data.description
 
-updateTask : TaskData -> Task -> Task
-updateTask newData task =
+resetTaskRuns : TaskData -> Task -> Task
+resetTaskRuns newData task =
+  if (isSameTask newData task) then
+    { task | runs = 0 }
+  else
+    task
+
+updateTaskFromBackend : TaskData -> Task -> Task
+updateTaskFromBackend newData task =
   if (isSameTask newData task) then
     let
       runs = if newData.timeout == 0 then (task.runs + 1) else task.runs
@@ -69,18 +80,18 @@ updateTask newData task =
   else
     task
 
-updateTasks : TaskData -> List Task -> List Task
-updateTasks newData tasks =
+updateTasks : (TaskData -> Task -> Task) -> TaskData -> List Task -> List Task
+updateTasks modifier newData tasks =
   let
       updateThis : Task -> Task
-      updateThis = updateTask newData
+      updateThis = modifier newData
   in
       List.map updateThis tasks
 
 addTask : TaskData -> List Task -> List Task
 addTask newData tasks =
   if List.any (isSameTask newData) tasks then
-     updateTasks newData tasks
+     updateTasks updateTaskFromBackend newData tasks
   else
     (Task newData newData.timeout 0) :: tasks
 
@@ -103,9 +114,9 @@ viewTask task =
       runs = (toString task.runs)
       taskData = task.data
   in
-    div [ (class classNames), (onClick (Run taskData)) ]
-    [ span [ class "description" ] [ text description ]
-    , span [ class "runs" ] [ text runs ]
+    div [ class classNames ]
+    [ span [ (class "description"), (onClick (Run taskData)) ] [ text description ]
+    , span [ class "runs", (onClick (ResetCount taskData)) ] [ text runs ]
     ]
 
 viewTimeout: Model -> Html Msg

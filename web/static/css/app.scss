@@ -46,6 +46,10 @@ html, body {
     padding-left: 0.5rem;
     color: darken($gray-lighter, 20);
 
+    &:hover {
+      color: $brand-danger;
+    }
+
     &:before {
       content: "(";
       margin-left: 0.5rem;
