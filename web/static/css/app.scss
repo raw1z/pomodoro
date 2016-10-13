@@ -1,6 +1,9 @@
 $font-family-sans-serif: "Inconsolata", sans-serif;
 $brand-color: #2c3e50;
 $brand-danger: #e74c3c;
+$brand-warning: #e67e22;
+$brand-dark-color: darken($brand-color, 5);
+$task-background-color: darken($brand-color, 3);
 
 @import 'bootstrap';
 
@@ -23,7 +26,7 @@ html, body {
 }
 
 .tasks {
-  border-top: 1px solid darken($brand-color, 5);
+  border-top: 1px solid $brand-dark-color;
   padding-top: 3rem;
 }
 
@@ -37,7 +40,15 @@ html, body {
   cursor: pointer;
 
   &:hover {
-    background: darken($brand-color, 3);
+    background: $task-background-color;
+  }
+
+  .description {
+    transition: color 0.5s;
+
+    &:hover {
+      color: $brand-warning;
+    }
   }
 
   .runs {
@@ -45,6 +56,7 @@ html, body {
     font-weight: 300;
     padding-left: 0.5rem;
     color: darken($gray-lighter, 20);
+    transition: color 0.5s;
 
     &:hover {
       color: $brand-danger;

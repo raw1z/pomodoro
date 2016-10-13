@@ -18,6 +18,10 @@ main =
     , subscriptions = subscriptions
     }
 
+init : (Model, Cmd msg)
+init =
+  (Model [] 0, Ports.requestStatus())
+
 -- UPDATE
 
 type Msg
@@ -26,6 +30,7 @@ type Msg
   | Tick Time
   | Run TaskData
   | ResetCount TaskData
+  | Status StatusData
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -47,6 +52,9 @@ update msg model =
 
     ResetCount task ->
       (Model (updateTasks resetTaskRuns task model.tasks) model.currentTimeout, Cmd.none)
+
+    Status statusData ->
+      (Model (addTask statusData.task model.tasks) statusData.remainingTime, Cmd.none)
 
 updateTimeout : Int -> Int
 updateTimeout currentTimeout =
@@ -101,6 +109,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch [ (Ports.start Start)
   , (Ports.timesup TimesUp)
+  , (Ports.getStatus Status)
   , (Time.every second Tick)
   ]
 

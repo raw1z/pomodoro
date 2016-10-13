@@ -9,6 +9,16 @@ defmodule Pomodoro.TaskChannel do
     {:reply, {:ok, payload}, socket}
   end
 
+  def handle_in("status", _payload, socket) do
+    case Pomodoro.Timer.status do
+      {:running, remainingTime, {description, timeout}} ->
+        push socket, "status", %{remainingTime: remainingTime, task: %{description: description, timeout: timeout}}
+
+      :idle -> fn -> nil end
+    end
+    {:noreply, socket}
+  end
+
   def handle_in("start", payload, socket) do
     broadcast socket, "start", payload
     {:noreply, socket}

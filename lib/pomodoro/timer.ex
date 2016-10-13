@@ -44,10 +44,9 @@ defmodule Pomodoro.Timer do
   end
 
   def handle_call(:status, _from, %{timer: timer, pid: pid}=state) do
-    remainingTime = Process.read_timer(timer)/1000
-    minutesInRemainingTime = Float.floor(remainingTime/60) |> round
-    secondsInRemainingTime = (remainingTime - (minutesInRemainingTime * 60)) |> round
-    {:reply, {:running, {minutesInRemainingTime, secondsInRemainingTime}, pid}, state}
+    remainingTime = Process.read_timer(timer)
+    info = Pomodoro.BaseTask.info(pid)
+    {:reply, {:running, remainingTime, info}, state}
   end
 
   def handle_cast({:start, pid, timeout}, _state) do

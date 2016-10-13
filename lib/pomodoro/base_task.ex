@@ -7,12 +7,16 @@ defmodule Pomodoro.BaseTask do
     GenServer.start_link __MODULE__, [notifierClass, description, timeout]
   end
 
+  def info(task) do
+    GenServer.call task, :info
+  end
+
   # GenServer implementation
 
   def init([notifierClass, description, timeout]) do
-    Pomodoro.Timer.set_task(self, timeout)
     Pomodoro.Endpoint.broadcast "tasks:crud", "start", %{description: description, timeout: timeout}
-    {:ok, %{notifierClass: notifierClass, description: description}}
+    Pomodoro.Timer.set_task(self, timeout)
+    {:ok, %{notifierClass: notifierClass, description: description, timeout: timeout}}
   end
 
   def handle_info(:times_up, %{notifierClass: notifierClass, description: description}) do
@@ -23,5 +27,9 @@ defmodule Pomodoro.BaseTask do
 
   def handle_info(:cancel, _state) do
     {:stop, :normal, nil}
+  end
+
+  def handle_call(:info, _from, %{description: description, timeout: timeout}=state) do
+    {:reply, {description, timeout}, state}
   end
 end
