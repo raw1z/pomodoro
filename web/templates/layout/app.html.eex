@@ -8,7 +8,6 @@
     <meta name="author" content="">
 
     <title>Pomodoro</title>
-    <link rel="stylesheet" href="//raw1z-cdn.s3.amazonaws.com/fonts/gotham/font.css">
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 

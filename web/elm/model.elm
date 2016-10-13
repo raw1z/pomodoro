@@ -7,6 +7,7 @@ type alias TaskData =
 
 type alias Task =
   { data: TaskData
+  , currentTimeout: Int
   , runs: Int
   }
 

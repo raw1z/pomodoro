@@ -1,6 +1,7 @@
 module Pomodoro exposing (..)
 
 import Html exposing (..)
+import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Html.App as App
 import Model exposing (..)
@@ -23,18 +24,22 @@ type Msg
   = Start TaskData
   | TimesUp TaskData
   | Tick Time
+  | Run TaskData
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update msg {tasks, currentTimeout} =
+update msg model =
   case msg of
     Start task ->
-      (Model (addTask task tasks) task.timeout, Cmd.none)
+      (Model (addTask task model.tasks) task.timeout, Cmd.none)
 
     TimesUp task ->
-      (Model (updateTasks task tasks) task.timeout, Cmd.none)
+      (Model (updateTasks task model.tasks) task.timeout, Cmd.none)
 
     Tick newTime ->
-      (Model tasks (updateTimeout currentTimeout), Cmd.none)
+      (Model model.tasks (updateTimeout model.currentTimeout), Cmd.none)
+
+    Run taskData ->
+      (model, Ports.run taskData)
 
 updateTimeout : Int -> Int
 updateTimeout currentTimeout =
@@ -55,8 +60,9 @@ updateTask newData task =
   if (isSameTask newData task) then
     let
       runs = if newData.timeout == 0 then (task.runs + 1) else task.runs
+      currentTimeout = newData.timeout
     in
-      { task | data = newData, runs = runs }
+      { task | currentTimeout = currentTimeout, runs = runs }
   else
     task
 
@@ -73,7 +79,7 @@ addTask newData tasks =
   if List.any (isSameTask newData) tasks then
      updateTasks newData tasks
   else
-    (Task newData 0) :: tasks
+    (Task newData newData.timeout 0) :: tasks
 
 -- SUBSCRIPTIONS
 
@@ -86,19 +92,20 @@ subscriptions model =
 
 -- VIEW
 
-viewTask: Task -> Html msg
+viewTask: Task -> Html Msg
 viewTask task =
   let
-      classNames = if task.data.timeout > 0 then "task active" else "task"
+      classNames = if task.currentTimeout > 0 then "task active" else "task"
       description = task.data.description
       runs = (toString task.runs)
+      taskData = task.data
   in
-    div [ (class classNames) ]
+    div [ (class classNames), (onClick (Run taskData)) ]
     [ span [ class "description" ] [ text description ]
     , span [ class "runs" ] [ text runs ]
     ]
 
-viewTimeout: Model -> Html msg
+viewTimeout: Model -> Html Msg
 viewTimeout model =
   let
       timeoutInSeconds = model.currentTimeout // 1000

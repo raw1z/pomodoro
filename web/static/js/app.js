@@ -15,3 +15,6 @@ timerChannel.on("timesup", (payload) => {
   app.ports.timesup.send(payload);
 });
 
+app.ports.run.subscribe((payload) => {
+  timerChannel.push("run", payload)
+});

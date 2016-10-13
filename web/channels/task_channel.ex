@@ -14,6 +14,11 @@ defmodule Pomodoro.TaskChannel do
     {:noreply, socket}
   end
 
+  def handle_in("run", %{"description" => description, "timeout" => timeout }, socket) do
+    Pomodoro.BaseTask.start(Pomodoro.CompoundNotifier, description, timeout)
+    {:noreply, socket}
+  end
+
   def handle_in("timesup", payload, socket) do
     broadcast socket, "timesup", payload
     {:noreply, socket}
