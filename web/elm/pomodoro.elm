@@ -39,7 +39,10 @@ update msg model =
       (Model model.tasks (updateTimeout model.currentTimeout), Cmd.none)
 
     Run taskData ->
-      (model, Ports.run taskData)
+      if model.currentTimeout == 0 then
+        (model, Ports.run taskData)
+      else
+        (model, Cmd.none)
 
 updateTimeout : Int -> Int
 updateTimeout currentTimeout =
