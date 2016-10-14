@@ -3,28 +3,20 @@ defmodule Pomodoro.Timer do
 
   # Public API
 
-  @name :pomodoro_timer
-
-  def start_link() do
-    GenServer.start_link __MODULE__, nil, name: {:global, @name}
+  def start_link(name) do
+    GenServer.start_link __MODULE__, nil, name: name
   end
 
   def set_task(pid, timeout) do
-    @name
-    |> :global.whereis_name
-    |> GenServer.cast({:start, pid, timeout})
+    GenServer.cast(__MODULE__, {:start, pid, timeout})
   end
 
-  def status() do
-    @name
-    |> :global.whereis_name
-    |> GenServer.call(:status)
+  def status do
+    GenServer.call(__MODULE__, :status)
   end
 
-  def stop() do
-    @name
-    |> :global.whereis_name
-    |> GenServer.cast(:stop)
+  def stop do
+    GenServer.cast(__MODULE__, :stop)
   end
 
   # GenServer implementation

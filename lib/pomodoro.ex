@@ -12,7 +12,7 @@ defmodule Pomodoro do
       # Start the Ecto repository
       supervisor(Pomodoro.Repo, []),
       # Here you could define other workers and supervisors as children
-      worker(Pomodoro.Timer, []),
+      worker(Pomodoro.Timer, [Pomodoro.Timer]),
       worker(Pomodoro.CompoundNotifier, []),
     ]
 

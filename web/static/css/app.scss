@@ -1,7 +1,8 @@
-$font-family-sans-serif: "Inconsolata", sans-serif;
+$font-family-sans-serif: "Fira Code", sans-serif;
 $brand-color: #2c3e50;
 $brand-danger: #e74c3c;
 $brand-warning: #e67e22;
+$brand-success: #27ae60;
 $brand-dark-color: darken($brand-color, 2);
 $task-background-color: darken($brand-color, 3);
 
@@ -19,7 +20,7 @@ html, body {
 }
 
 .app-content {
-  flex: 1;
+  min-width: 800px;
   margin: {
     left: 5rem;
     right: 5rem;
@@ -27,67 +28,112 @@ html, body {
 }
 
 .timeout {
-  font-size: 3*$font-size-h2;
+  font-size: 2*$font-size-h2;
   text-align: center;
   padding: 1rem;
   color: darken($gray-lighter, 15);
 }
 
 .tasks {
-  padding-top: 3rem;
   border-top: 1px solid $brand-dark-color;
+  padding-top: 1rem;
 }
 
 .task {
   display: flex;
-  font-size: $font-size-h3;
-  text-transform: uppercase;
   transition: color 0.5s, background-color 0.5s;
-  padding: 1rem;
-  cursor: pointer;
-  margin-bottom: 1rem;
 
   &:hover {
     background: $task-background-color;
     border-radius: 10px;
+
+    .task-btn {
+      opacity: 1;
+    }
+
+    .description {
+      .description-elapsed-time, .description-runs {
+        opacity: 1;
+      }
+    }
   }
 
   .description {
-    transition: color 0.5s;
     flex: 1;
+    padding: 1rem;
 
-    &:hover {
-      color: $brand-warning;
+    .description-label {
+      display: inline-block;
+      transition: color 0.5s;
+      cursor: pointer;
+      text-transform: uppercase;
+
+      &:hover {
+        color: lighten($brand-success, 20);
+      }
+    }
+
+    .description-elapsed-time {
+      display: inline-block;
+      margin-left: 1.5rem;
+      color: $gray-light;
+      transition: opacity 0.5s;
+      opacity: 0;
+    }
+
+    .description-runs {
+      $color: $gray-light;
+
+      display: inline-block;
+      margin-left: 1rem;
+      color: $color;
+      transition: opacity 0.5s;
+      opacity: 0;
+      cursor: pointer;
+
+      &:before {
+        content: "(";
+        color: transparentize($color, 0.5);
+      }
+
+      &:after {
+        content: ")";
+        color: transparentize($color, 0.5);
+      }
+
+      &:hover {
+        color: transparent;
+
+        &:before {
+          content: "reset";
+          color: $brand-warning;
+        }
+
+        &:after {
+          color: transparent;
+        }
+      }
     }
   }
 
-  .runs {
+  .task-btn {
     display: inline-block;
-    font-weight: 300;
-    padding-left: 0.5rem;
-    color: darken($gray-lighter, 20);
-    transition: color 0.5s;
+    padding: 1rem;
+    color: transparentize($gray-lighter, 0.9);
+    transition: color 0.5s, opacity 0.5s;
+    text-decoration: none;
+    opacity: 0;
+    cursor: pointer;
 
     &:hover {
       color: $brand-danger;
-    }
-
-    &:before {
-      content: "(";
-      margin-left: 0.5rem;
-      color: $gray-light;
-    }
-
-    &:after {
-      content: ")";
-      color: $gray-light;
     }
   }
 
   &.active {
-    .description {
+    .description-label, .description-label:hover {
       font-weight: 700;
-      color: $brand-danger;
+      color: $brand-success;
     }
   }
 }

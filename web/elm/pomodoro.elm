@@ -139,18 +139,61 @@ subscriptions model =
 
 -- VIEW
 
+formatTime: Int -> String
+formatTime time =
+  String.pad 2 '0' (toString time)
+
+formatTaskElapsedTime: Task -> String
+formatTaskElapsedTime task =
+  let
+      elapsedTime = (task.runs * (task.data.timeout // 1000))
+      hour = elapsedTime // 36000
+      minutes = (elapsedTime - hour*3600) // 60
+      seconds = (elapsedTime - hour*3600 - minutes*60)
+  in
+     if hour > 0 then
+      (toString hour) ++ "h " ++ (toString minutes) ++ "min " ++ (toString seconds) ++ "s"
+     else
+       if minutes > 0 then
+         if seconds == 0 then
+            (toString minutes) ++ "min"
+         else
+           (toString minutes) ++ "min " ++ (toString seconds) ++ "s"
+       else
+         (toString seconds) ++ "s"
+
+viewTaskDescription: Task -> Html Msg
+viewTaskDescription task =
+  let
+      description = task.data.description
+      taskData = task.data
+  in
+    span [ (class "description") ]
+      [ span [ (class "description-label"), (onClick (Run taskData)) ] [ text description ]
+      , span [ class "description-elapsed-time"] [ text (formatTaskElapsedTime task) ]
+      , span [ class "description-runs", (onClick (ResetCount taskData)) ] [ text (toString task.runs) ]
+      ]
+
+isTaskActive: Task -> Bool
+isTaskActive task =
+  (task.currentTimeout > 0)
+
+viewTaskActions: Task -> Html Msg
+viewTaskActions task =
+  if isTaskActive(task) then
+     a [ class "task-btn cancel-btn" ] [ text "cancel" ]
+  else
+     a [ class "task-btn archive-btn" ] [ text "archive" ]
+
 viewTask: Task -> Html Msg
 viewTask task =
   let
-      classNames = if task.currentTimeout > 0 then "task active" else "task"
-      description = task.data.description
-      runs = (toString task.runs)
-      taskData = task.data
+      classNames = if isTaskActive(task) then "task active" else "task"
   in
     div [ class classNames ]
-    [ span [ (class "description"), (onClick (Run taskData)) ] [ text description ]
-    , span [ class "runs", (onClick (ResetCount taskData)) ] [ text runs ]
-    ]
+      [ viewTaskDescription task
+      , viewTaskActions task
+      ]
 
 viewTimeout: Model -> Html Msg
 viewTimeout model =
@@ -158,7 +201,11 @@ viewTimeout model =
       timeoutInSeconds = model.currentTimeout // 1000
       minutes = timeoutInSeconds // 60
       seconds = timeoutInSeconds - minutes * 60
-      label = (String.pad 2 '0' (toString minutes)) ++ ":" ++ (String.pad 2 '0' (toString seconds))
+      label =
+        if minutes == 0 && seconds == 0 then
+          "--:--"
+        else
+          (formatTime minutes) ++ ":" ++ (formatTime seconds)
   in
     div [ (class "timeout") ]
       [ text label
