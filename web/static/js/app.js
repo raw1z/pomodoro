@@ -25,7 +25,24 @@ app.ports.run.subscribe((payload) => {
   timerChannel.push("run", payload)
 });
 
+function restorePersistedState() {
+  try {
+    let persistedState = localStorage.getItem('pomodoro')
+    let tasks = JSON.parse(persistedState);
+    if (tasks != null) {
+      app.ports.getPersistedState.send(tasks);
+    }
+  } catch(e) {
+    console.log(`failed restoring persisted state: ${e.message}`);
+  }
+}
+
 app.ports.requestStatus.subscribe(() => {
+  restorePersistedState();
   timerChannel.push("status", {});
+});
+
+app.ports.saveTasks.subscribe((tasks) => {
+  localStorage.setItem('pomodoro', JSON.stringify(tasks));
 });
 

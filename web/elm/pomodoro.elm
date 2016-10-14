@@ -31,15 +31,24 @@ type Msg
   | Run TaskData
   | ResetCount TaskData
   | Status StatusData
+  | Restore (List TaskData)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Start task ->
-      (Model (addTask task model.tasks) task.timeout, Cmd.none)
+      let
+          newTasks = (addTask task model.tasks)
+          newTaskData = List.map (\t -> t.data) newTasks
+      in
+        (Model newTasks task.timeout, Ports.saveTasks newTaskData)
 
     TimesUp task ->
-      (Model (updateTasks updateTaskFromBackend task model.tasks) task.timeout, Cmd.none)
+      let
+          newTasks = (updateTasks updateTaskFromBackend task model.tasks)
+          newTaskData = List.map (\t -> t.data) newTasks
+      in
+        (Model newTasks task.timeout, Ports.saveTasks newTaskData)
 
     Tick newTime ->
       (Model model.tasks (updateTimeout model.currentTimeout), Cmd.none)
@@ -51,10 +60,24 @@ update msg model =
         (model, Cmd.none)
 
     ResetCount task ->
-      (Model (updateTasks resetTaskRuns task model.tasks) model.currentTimeout, Cmd.none)
+      let
+          newTasks = (updateTasks resetTaskRuns task model.tasks)
+          newTaskData = List.map (\t -> t.data) newTasks
+      in
+        (Model newTasks model.currentTimeout, Ports.saveTasks newTaskData)
 
     Status statusData ->
-      (Model (addTask statusData.task model.tasks) statusData.remainingTime, Cmd.none)
+      let
+          newTasks = (addTask statusData.task model.tasks)
+          newTaskData = List.map (\t -> t.data) newTasks
+      in
+        (Model newTasks statusData.remainingTime, Ports.saveTasks newTaskData)
+
+    Restore tasks ->
+      let
+          newTasks = List.map (\newData -> (Task newData 0 0)) tasks
+      in
+        (Model newTasks 0, Cmd.none)
 
 updateTimeout : Int -> Int
 updateTimeout currentTimeout =
@@ -111,6 +134,7 @@ subscriptions model =
   , (Ports.timesup TimesUp)
   , (Ports.getStatus Status)
   , (Time.every second Tick)
+  , (Ports.getPersistedState Restore)
   ]
 
 -- VIEW
@@ -142,7 +166,7 @@ viewTimeout model =
 
 view : Model -> Html Msg
 view model =
-  div []
+  div [ class "app-content" ]
     [ (viewTimeout model)
     , div [ class "tasks" ] (List.map viewTask model.tasks)
     ]
