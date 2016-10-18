@@ -34,6 +34,13 @@ html, body {
   color: darken($gray-lighter, 15);
 }
 
+.active-task {
+  padding: {
+    top: 1rem;
+    bottom: 1rem;
+  }
+}
+
 .tasks {
   border-top: 1px solid $brand-dark-color;
   padding-top: 1rem;
@@ -41,6 +48,7 @@ html, body {
 
 .task {
   display: flex;
+  font-size: $font-size-h4;
   transition: color 0.5s, background-color 0.5s;
 
   &:hover {

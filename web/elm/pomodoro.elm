@@ -213,8 +213,13 @@ viewTimeout model =
 
 view : Model -> Html Msg
 view model =
-  div [ class "app-content" ]
-    [ (viewTimeout model)
-    , div [ class "tasks" ] (List.map viewTask model.tasks)
-    ]
+  let
+      nonActiveTasks = List.filter (\task -> isTaskActive(task) == False) model.tasks
+      activeTasks = (List.filter isTaskActive model.tasks)
+  in
+    div [ class "app-content" ]
+      [ (viewTimeout model)
+      , div [ class "active-task" ] (List.map viewTask activeTasks)
+      , div [ class "tasks" ] (List.map viewTask nonActiveTasks)
+      ]
 
