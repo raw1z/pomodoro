@@ -10,6 +10,11 @@ type alias TaskData =
   , timeout: Int
   }
 
+type alias PersistedTask =
+  { data: TaskData
+  , runs: Int
+  }
+
 type alias Task =
   { data: TaskData
   , currentTimeout: Int

@@ -31,7 +31,7 @@ type Msg
   | Run TaskData
   | ResetCount TaskData
   | Status StatusData
-  | Restore (List TaskData)
+  | Restore (List PersistedTask)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -39,14 +39,14 @@ update msg model =
     Start task ->
       let
           newTasks = (addTask task model.tasks)
-          newTaskData = List.map (\t -> t.data) newTasks
+          newTaskData = buildPersistedTasksFromTasks newTasks
       in
         (Model newTasks task.timeout, Ports.saveTasks newTaskData)
 
     TimesUp task ->
       let
           newTasks = (updateTasks updateTaskFromBackend task model.tasks)
-          newTaskData = List.map (\t -> t.data) newTasks
+          newTaskData = buildPersistedTasksFromTasks newTasks
       in
         (Model newTasks task.timeout, Ports.saveTasks newTaskData)
 
@@ -62,22 +62,35 @@ update msg model =
     ResetCount task ->
       let
           newTasks = (updateTasks resetTaskRuns task model.tasks)
-          newTaskData = List.map (\t -> t.data) newTasks
+          newTaskData = buildPersistedTasksFromTasks newTasks
       in
         (Model newTasks model.currentTimeout, Ports.saveTasks newTaskData)
 
     Status statusData ->
       let
           newTasks = (addTask statusData.task model.tasks)
-          newTaskData = List.map (\t -> t.data) newTasks
+          newTaskData = buildPersistedTasksFromTasks newTasks
       in
         (Model newTasks statusData.remainingTime, Ports.saveTasks newTaskData)
 
-    Restore tasks ->
-      let
-          newTasks = List.map (\newData -> (Task newData 0 0)) tasks
-      in
-        (Model newTasks 0, Cmd.none)
+    Restore persistedTasks ->
+      (Model (buildTasksFromPersistedTasks persistedTasks) 0, Cmd.none)
+
+buildPersistedTasksFromTasks : (List Task) -> (List PersistedTask)
+buildPersistedTasksFromTasks tasks =
+  let
+      buildPersistedTask task =
+        PersistedTask task.data task.runs
+  in
+     List.map buildPersistedTask tasks
+
+buildTasksFromPersistedTasks : (List PersistedTask) -> (List Task)
+buildTasksFromPersistedTasks persistedTasks =
+  let
+      buildTask persistedTask =
+        Task persistedTask.data 0 persistedTask.runs
+  in
+     List.map buildTask persistedTasks
 
 updateTimeout : Int -> Int
 updateTimeout currentTimeout =
