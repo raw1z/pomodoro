@@ -4,7 +4,7 @@ $brand-danger: #e74c3c;
 $brand-warning: #e67e22;
 $brand-success: #27ae60;
 $brand-dark-color: darken($brand-color, 2);
-$task-background-color: darken($brand-color, 3);
+$task-background-color: darken($brand-color, 1);
 
 @import 'bootstrap';
 
@@ -20,11 +20,7 @@ html, body {
 }
 
 .app-content {
-  min-width: 800px;
-  margin: {
-    left: 5rem;
-    right: 5rem;
-  }
+  flex: 1;
 }
 
 .timeout {
@@ -34,26 +30,32 @@ html, body {
   color: darken($gray-lighter, 15);
 }
 
-.active-task {
-  padding: {
-    top: 1rem;
-    bottom: 1rem;
+.active-task, .tasks {
+  margin: {
+    left: 5rem;
+    right: 5rem;
   }
 }
 
-.tasks {
-  border-top: 1px solid $brand-dark-color;
-  padding-top: 1rem;
+.active-task {
+  .task {
+    background: darken($task-background-color, 3);
+  }
 }
 
 .task {
   display: flex;
   font-size: $font-size-h4;
   transition: color 0.5s, background-color 0.5s;
+  background: $task-background-color;
+  border-radius: 10px;
+  margin: {
+    top: 1rem;
+    bottom: 1rem;
+  }
 
   &:hover {
-    background: $task-background-color;
-    border-radius: 10px;
+    background: darken($task-background-color, 3);
 
     .task-btn {
       opacity: 1;
