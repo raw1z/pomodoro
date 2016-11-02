@@ -24,5 +24,6 @@ type alias Task =
 type alias Model =
   { tasks: List Task
   , currentTimeout: Int
+  , editing: Bool
   }
 

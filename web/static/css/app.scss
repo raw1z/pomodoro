@@ -21,6 +21,30 @@ html, body {
 
 .app-content {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.btn-add {
+  position: absolute;
+  right: 5rem;
+  top: 3.3rem;
+  font-size: $font-size-h3;
+  text-transform: uppercase;
+  color: $gray-lighter;
+  opacity: 0.5;
+  transition: color 0.5s, opacity 0.5s;
+
+  &:hover {
+    color: $brand-success;
+    opacity: 1;
+    text-decoration: none;
+  }
+}
+
+.main-content {
+  flex: 1;
 }
 
 .timeout {
@@ -77,10 +101,6 @@ html, body {
       transition: color 0.5s;
       cursor: pointer;
       text-transform: uppercase;
-
-      &:hover {
-        color: lighten($brand-success, 20);
-      }
     }
 
     .description-elapsed-time {
